@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Редактор карты мира</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== TOOLBAR ===== -->
+  <div id="toolbar">
+    <div class="tb-group">
+      <button class="tool-btn" data-tool="select"    title="Выбрать / Изменить [V]">&#9654;</button>
+      <button class="tool-btn" data-tool="continent" title="Нарисовать континент [C]">&#127758;</button>
+      <button class="tool-btn" data-tool="country"   title="Нарисовать страну [S]">&#127987;</button>
+      <button class="tool-btn" data-tool="sea"       title="Нарисовать море / озеро [O]">&#127754;</button>
+      <button class="tool-btn" data-tool="river"     title="Нарисовать реку [R]">&#8764;</button>
+      <button class="tool-btn" data-tool="mountain"  title="Добавить горы [M]">&#9968;</button>
+      <button class="tool-btn" data-tool="label"     title="Добавить надпись [L]">T</button>
+    </div>
+    <div class="tb-sep"></div>
+    <div class="tb-group">
+      <button id="btn-undo" title="Отменить [Ctrl+Z]">&#8617;</button>
+      <button id="btn-redo" title="Повторить [Ctrl+Y]">&#8618;</button>
+    </div>
+    <div class="tb-sep"></div>
+    <div class="tb-group">
+      <button id="btn-zoom-in"  title="Приблизить [+]">+</button>
+      <button id="btn-zoom-out" title="Отдалить [&minus;]">&minus;</button>
+      <button id="btn-zoom-fit" title="По размеру [0]">&#8862;</button>
+    </div>
+    <div class="tb-sep"></div>
+    <div class="tb-group">
+      <button id="btn-save"   title="Сохранить [Ctrl+S]">&#128190;</button>
+      <button id="btn-export" title="Экспорт JSON">&#128228;</button>
+      <button id="btn-import" title="Импорт JSON">&#128229;</button>
+    </div>
+    <div class="tb-right">
+      <span id="hint-text"></span>
+    </div>
+  </div>
+
+  <!-- ===== MAIN AREA ===== -->
+  <div id="main">
+
+    <!-- LEFT PANEL: items list -->
+    <div id="panel-left">
+      <div class="panel-title">Объекты</div>
+      <div id="items-list"></div>
+    </div>
+
+    <!-- CANVAS -->
+    <div id="canvas-wrap">
+      <svg id="map-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <!-- world group: all content lives here, transform = pan+zoom -->
+        <g id="world">
+          <rect id="ocean-bg" x="-8000" y="-5000" width="16000" height="10000" fill="#4a7fb5"/>
+          <rect id="grid-bg"  x="-8000" y="-5000" width="16000" height="10000" fill="url(#grid)"/>
+          <g id="layer-continents"></g>
+          <g id="layer-seas"></g>
+          <g id="layer-countries"></g>
+          <g id="layer-rivers"></g>
+          <g id="layer-mountains"></g>
+          <g id="layer-labels"></g>
+          <g id="layer-overlay"></g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- RIGHT PANEL: properties -->
+    <div id="panel-right">
+      <div class="panel-title">Свойства</div>
+      <div id="props"></div>
+    </div>
+
+  </div><!-- /#main -->
+
+  <!-- STATUS BAR -->
+  <div id="statusbar">
+    <span id="st-tool">Инструмент: Выбор</span>
+    <span id="st-coords">X: 0  Y: 0</span>
+    <span id="st-zoom">Масштаб: 100%</span>
+    <span id="st-saved"></span>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- ===== DIALOGS ===== -->
+<div id="dlg-label" class="dlg hidden">
+  <div class="dlg-box">
+    <div class="dlg-title">Добавить надпись</div>
+    <input type="text" id="dlg-label-input" placeholder="Текст надписи…" autocomplete="off">
+    <div class="dlg-btns">
+      <button id="dlg-label-ok">OK</button>
+      <button id="dlg-label-cancel">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- hidden file input for import -->
+<input type="file" id="file-import" accept=".json" style="display:none">
+
+<script src="app.js"></script>
+</body>
+</html>

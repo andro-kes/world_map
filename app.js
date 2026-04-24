@@ -44,6 +44,16 @@ const TYPE_LABEL = {
   label:     'Надпись',
 };
 
+const TOOL_LABEL = {
+  select:    'Выбор',
+  continent: 'Континент',
+  country:   'Страна',
+  sea:       'Море / Озеро',
+  river:     'Река',
+  mountain:  'Горы',
+  label:     'Надпись',
+};
+
 const TYPE_ICON = {
   continent: '🗺️',
   country:   '🏳️',
@@ -1042,7 +1052,7 @@ function setTool(tool) {
   else if (tool === 'mountain') svg.classList.add('tool-mountain');
   else if (tool === 'label')    svg.classList.add('tool-label');
 
-  document.getElementById('st-tool').textContent = 'Инструмент: ' + (TYPE_LABEL[tool] || tool);
+  document.getElementById('st-tool').textContent = 'Инструмент: ' + (TOOL_LABEL[tool] || tool);
 }
 
 /* ─────────────────────────────────────────────

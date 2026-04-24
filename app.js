@@ -44,15 +44,7 @@ const TYPE_LABEL = {
   label:     'Надпись',
 };
 
-const TOOL_LABEL = {
-  select:    'Выбор',
-  continent: 'Континент',
-  country:   'Страна',
-  sea:       'Море / Озеро',
-  river:     'Река',
-  mountain:  'Горы',
-  label:     'Надпись',
-};
+const TOOL_LABEL = { select: 'Выбор', ...TYPE_LABEL };
 
 const TYPE_ICON = {
   continent: '🗺️',

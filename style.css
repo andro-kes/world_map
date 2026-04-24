@@ -1,0 +1,360 @@
+/* ================================================================
+   RESET & BASE
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg0:     #1e1e2e;
+  --bg1:     #2a2a3e;
+  --bg2:     #313244;
+  --bg3:     #45475a;
+  --bg4:     #585b70;
+  --fg:      #cdd6f4;
+  --fg2:     #a6adc8;
+  --fg3:     #6c7086;
+  --accent:  #89b4fa;
+  --accent2: #74c7ec;
+  --red:     #f38ba8;
+  --green:   #a6e3a1;
+  --yellow:  #f9e2af;
+  --border:  #45475a;
+}
+
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  background: var(--bg0);
+  color: var(--fg);
+  user-select: none;
+}
+
+/* ================================================================
+   APP LAYOUT
+   ================================================================ */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ================================================================
+   TOOLBAR
+   ================================================================ */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  height: 44px;
+}
+
+.tb-group {
+  display: flex;
+  gap: 2px;
+}
+
+.tb-sep {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.tb-right {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+#toolbar button, .tool-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--fg);
+  font-size: 15px;
+  line-height: 1;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+#toolbar button:hover, .tool-btn:hover {
+  background: var(--bg3);
+}
+
+.tool-btn.active {
+  background: var(--bg4);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ================================================================
+   MAIN 3-COLUMN LAYOUT
+   ================================================================ */
+#main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ================================================================
+   LEFT PANEL
+   ================================================================ */
+#panel-left {
+  width: 195px;
+  min-width: 195px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-title {
+  padding: 8px 12px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--fg3);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+#items-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1px;
+}
+
+.item-row:hover   { background: var(--bg3); }
+.item-row.sel     { background: var(--bg4); }
+
+.item-row .iico   { font-size: 13px; flex-shrink: 0; line-height: 1; }
+.item-row .idot   { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2); }
+.item-row .iname  { flex: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-row .ivis   { font-size: 11px; color: var(--fg3); cursor: pointer; padding: 2px; }
+
+/* ================================================================
+   CANVAS
+   ================================================================ */
+#canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg0);
+}
+
+#map-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: default;
+}
+
+#map-svg.tool-draw    { cursor: crosshair; }
+#map-svg.tool-mountain { cursor: cell; }
+#map-svg.tool-label   { cursor: text; }
+#map-svg.panning      { cursor: grabbing !important; }
+
+/* ================================================================
+   RIGHT PANEL
+   ================================================================ */
+#panel-right {
+  width: 215px;
+  min-width: 215px;
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#props {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px 20px;
+}
+
+.no-sel {
+  color: var(--fg3);
+  font-style: italic;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+}
+
+/* property rows */
+.pr { margin-bottom: 11px; }
+.pr label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--fg3);
+  margin-bottom: 4px;
+}
+
+.pr input[type="text"],
+.pr input[type="number"],
+.pr select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--bg4);
+  border-radius: 4px;
+  padding: 5px 7px;
+  color: var(--fg);
+  font-size: 12px;
+  outline: none;
+}
+.pr input[type="text"]:focus,
+.pr input[type="number"]:focus,
+.pr select:focus {
+  border-color: var(--accent);
+}
+.pr select { cursor: pointer; }
+
+.pr input[type="color"] {
+  width: 100%;
+  height: 30px;
+  padding: 2px 3px;
+  background: var(--bg3);
+  border: 1px solid var(--bg4);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pr input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.pr-row2 { display: flex; gap: 6px; }
+.pr-row2 .pr { flex: 1; }
+
+.prop-btn {
+  width: 100%;
+  padding: 5px 8px;
+  background: var(--bg3);
+  border: 1px solid var(--bg4);
+  border-radius: 4px;
+  color: var(--fg);
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+}
+.prop-btn:hover { background: var(--bg4); }
+.prop-btn.danger { border-color: var(--red); color: var(--red); }
+.prop-btn.danger:hover { background: rgba(243,139,168,0.12); }
+
+.prop-sep { height: 1px; background: var(--border); margin: 12px 0; }
+
+/* ================================================================
+   STATUS BAR
+   ================================================================ */
+#statusbar {
+  display: flex;
+  gap: 18px;
+  padding: 3px 12px;
+  background: var(--bg1);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--fg3);
+  flex-shrink: 0;
+}
+
+#st-saved { color: var(--green); margin-left: auto; }
+
+/* ================================================================
+   SVG ELEMENTS (map items)
+   ================================================================ */
+.map-item { cursor: pointer; }
+.map-item:hover { filter: brightness(1.15) drop-shadow(0 0 3px rgba(255,255,255,0.3)); }
+
+/* control points */
+.cp-vertex { cursor: grab; }
+.cp-vertex:active { cursor: grabbing; }
+.cp-mid { cursor: copy; opacity: 0.6; }
+.cp-mid:hover { opacity: 1; }
+
+/* ================================================================
+   DIALOGS
+   ================================================================ */
+.dlg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.dlg.hidden { display: none; }
+
+.dlg-box {
+  background: var(--bg2);
+  border: 1px solid var(--bg4);
+  border-radius: 10px;
+  padding: 22px 24px 18px;
+  min-width: 300px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.dlg-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.dlg-box input[type="text"] {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--bg4);
+  border-radius: 5px;
+  padding: 7px 10px;
+  color: var(--fg);
+  font-size: 13px;
+  outline: none;
+  margin-bottom: 14px;
+}
+.dlg-box input[type="text"]:focus { border-color: var(--accent); }
+
+.dlg-btns { display: flex; gap: 8px; justify-content: flex-end; }
+.dlg-btns button {
+  padding: 6px 18px;
+  border-radius: 5px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+.dlg-btns button:first-child { background: var(--accent); color: var(--bg0); font-weight: 600; }
+.dlg-btns button:last-child  { background: var(--bg3); color: var(--fg); }
+.dlg-btns button:hover { filter: brightness(1.1); }
+
+/* ================================================================
+   SCROLLBARS
+   ================================================================ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
